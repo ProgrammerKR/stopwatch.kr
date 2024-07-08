@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  h1 {
+    color: #333;
+  }
+
+  .stopwatch {
+    margin-bottom: 20px;
+  }
+
+  .stopwatch p {
+    font-size: 2em;
+    margin: 0;
+  }
+
+  .controls {
+    margin-top: 10px;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Stopwatch</h1>
+  
+  <!-- Stopwatch -->
+  <div class="stopwatch">
+    <p id="stopwatchDisplay">00:00:00</p>
+    <div class="controls">
+      <button id="startStopwatchBtn">Start</button>
+      <button id="resetStopwatchBtn">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Stopwatch variables
+  let stopwatchInterval;
+  let stopwatchRunning = false;
+  const stopwatchDisplay = document.getElementById('stopwatchDisplay');
+  const startStopwatchBtn = document.getElementById('startStopwatchBtn');
+  const resetStopwatchBtn = document.getElementById('resetStopwatchBtn');
+
+  // Stopwatch functions
+  startStopwatchBtn.addEventListener('click', toggleStopwatch);
+  resetStopwatchBtn.addEventListener('click', resetStopwatch);
+
+  function toggleStopwatch() {
+    if (stopwatchRunning) {
+      clearInterval(stopwatchInterval);
+      stopwatchRunning = false;
+      startStopwatchBtn.textContent = 'Start';
+    } else {
+      stopwatchInterval = setInterval(updateStopwatch, 1000);
+      stopwatchRunning = true;
+      startStopwatchBtn.textContent = 'Stop';
+    }
+  }
+
+  function updateStopwatch() {
+    const currentTime = stopwatchDisplay.textContent.split(':');
+    let hours = parseInt(currentTime[0]);
+    let minutes = parseInt(currentTime[1]);
+    let seconds = parseInt(currentTime[2]);
+
+    seconds++;
+
+    if (seconds >= 60) {
+      seconds = 0;
+      minutes++;
+      if (minutes >= 60) {
+        minutes = 0;
+        hours++;
+      }
+    }
+
+    stopwatchDisplay.textContent = 
+      (hours < 10 ? '0' + hours : hours) + ':' +
+      (minutes < 10 ? '0' + minutes : minutes) + ':' +
+      (seconds < 10 ? '0' + seconds : seconds);
+  }
+
+  function resetStopwatch() {
+    clearInterval(stopwatchInterval);
+    stopwatchRunning = false;
+    stopwatchDisplay.textContent = '00:00:00';
+    startStopwatchBtn.textContent = 'Start';
+  }
+</script>
+</body>
+</html>
